@@ -51,4 +51,19 @@
 
 
 (define (subst new old lat)
-  (cond 
+  (cond
+    [(null? lat) '()]
+    [(eq? (car lat) old) (cons new (cdr lat))]
+    [else (cons (car lat) (subst new old (cdr lat)))]))
+
+(define (subst2 new o1 o2 lat)
+  (cond
+    [(null? lat) '()]
+    [(or (eq? o1 (car lat)) (eq? o2 (car lat))) (cons new (cdr lat))]
+    [else (cons (car lat) (subst2 new o1 o2 (cdr lat)))]))
+
+(define (multirember a lat)
+  (cond
+    [(null? lat) '()]
+    [(eq? a (car lat)) (cons )]
+    [else (cons (car lat) (multirember a (cdr lat)))]))
