@@ -287,3 +287,8 @@
     [(eq? (car (cdr nexp)) (quote +)) (+ (value (car nexp)) (value (car (cdr (cdr nexp)))))]
     [(eq? (car (cdr nexp)) (quote *)) (* (value (car nexp)) (value (car (cdr (cdr nexp)))))]
     [(eq? (car (cdr nexp)) (quote **)) (** (value (car nexp)) (value (car (cdr (cdr nexp)))))]))
+
+(define (1st-sub-exp aexp)
+  (car (cdr aexp)))
+
+(define (2nd-sub-exp aexp

@@ -22,6 +22,13 @@
 
 - Always ask `null?` as the first question in expressin any function.
 
+## Logic
+
+Obvious, but
+
+- `and` stops if the first argument has the value #f.
+- `or` stops if the first argument has the value #t.
+
 
 # The Ten Commandments
 
