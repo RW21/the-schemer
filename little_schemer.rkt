@@ -323,3 +323,59 @@
     [(null? lat) '()]
     [(member? (car lat) (cdr lat)) (makeset (cdr lat))]
     [else (cons (car lat) (makeset (cdr lat)))]))
+
+(define (makeset_ lat)
+  (cond
+    [(null? lat) '()]
+    [else (cons (car lat) (makeset_ (multirember (car lat) (cdr lat))))]))
+
+(define (subset? set1 set2)
+  (cond
+    [(null? set1) #t]
+    [else (and (member? (car set1) set2) (subset? (cdr set1) set2))]))
+
+(define (eqset? set1 set2)
+  (and (subset? set1 set2) (subset? set2 set1)))
+
+(define (intersect? set1 set2)
+  (cond
+    [(null? set1) #f]
+    [else (or (member? (car set1) set2) (intersect? (cdr set1) set2))]))
+
+(define (intersect set1 set2)
+  (cond
+    [(null? set1) '()]
+    [(member? (car set1) set2) (cons (car set1) (intersect (cdr set1) set2))]
+    [else (intersect (cdr set1) set2)]))
+
+(define (union set1 set2)
+  (cond
+    [(null? set1) set2] 
+    [(member? (car set1) set2) (union (cdr set1) set2)]
+    [else (cons (car set1) (union (cdr set1) set2))]))
+
+(define (difference set1 set2)
+  (cond
+    [(null? set1) '()]
+    [(member? (car set1) set2) (difference (cdr set1) set2)]
+    [else (cons (car set1) (difference (cdr set1) set2))]))
+
+(define (intersectall l)
+  (cond
+    [(null? (cdr l)) (car l)]
+    [else (intersect (car l) (intersectall (cdr l)))]))
+
+(define (first p)
+  (car p))
+
+(define (second p)
+  (car (cdr p)))
+
+(define (build s1 s2)
+  (cons s1 (cons s2 '())))
+
+(define (third l)
+  (car (cdr (cdr l))))
+
+(define (fun? rel)
+  (
