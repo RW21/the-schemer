@@ -378,4 +378,38 @@
   (car (cdr (cdr l))))
 
 (define (fun? rel)
-  (
+  (set? (firsts rel)))
+
+(define (revrel rel)
+  (cond
+    [(null? rel) '()]
+    [else (cons (revpair (car rel))
+                (revrel (cdr rel)))]))
+
+(define (revpair pair)
+  (build (second pair) (first pair)))
+
+(define (fullfun? fun)
+  (set? (seconds fun)))
+
+(define (seconds l)
+  (map second l))
+
+(define (one-to-one? fun)
+  (fun? (revrel fun)))
+
+(define (rember-f test?)
+  (lambda (a l)
+    (cond
+      [(null? l) '()]
+      [(test? (car l) a) (cdr l)]
+      [else (cons (car l)
+                  ((rember-f test?) a (cdr l)))])))
+
+(define (eq?-c a)
+  (lambda (x) (eq? x a)))
+
+(define eq?-salad
+  (eq?-c "salad"))
+
+
