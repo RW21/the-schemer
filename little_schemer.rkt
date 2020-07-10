@@ -284,6 +284,42 @@
 (define (value nexp)
   (cond
     [(atom? nexp) nexp]
-    [(eq? (car (cdr nexp)) (quote +)) (+ (value (car nexp)) (value (car (cdr (cdr nexp)))))]
-    [(eq? (car (cdr nexp)) (quote *)) (* (value (car nexp)) (value (car (cdr (cdr nexp)))))]
-    [(eq? (car (cdr nexp)) (quote **)) (** (value (car nexp)) (value (car (cdr (cdr nexp)))))]))
+    [(eq? (operator nexp) (quote +)) (+ (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]
+    [(eq? (operator nexp) (quote *)) (* (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]
+    [(eq? (operator nexp) (quote **)) (** (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]))
+
+(define (1st-sub-exp aexp)
+  (car (cdr aexp)))
+
+(define (2nd-sub-exp aexp)
+  (car (cdr (cdr aexp))))
+
+(define (operator aexp)
+  (car aexp))
+
+; ()
+(define (sero? n)
+  (null? n))
+
+(define (edd1 n)
+  (cons '() n))
+
+(define (zub1 n)
+  (cdr n))
+
+(define (+_ n m)
+  (cond
+    [(sero? n) m]
+    [else (edd1 (+_ (zub1 n) m))]))
+
+(define (set? lat)
+  (cond
+    [(null? lat) #t]
+    [(member? (car lat) (cdr lat)) #f]
+    [else (set? (cdr lat))]))
+
+(define (makeset lat)
+  (cond
+    [(null? lat) '()]
+    [(member? (car lat) (cdr lat)) (makeset (cdr lat))]
+    [else (cons (car lat) (makeset (cdr lat)))]))
