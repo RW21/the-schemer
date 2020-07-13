@@ -472,6 +472,8 @@
 (define (a-friend x y)
   (null? y))
 
+(define (identity x) x)
+
 (define (multirember&co a lat k)
   (cond
     [(null? lat) (k '() '())]
@@ -486,6 +488,8 @@
 (define (new-friend newlat seen)
   (a-friend newlat (cons (quote tuna) seen)))
 
+(define (last-friend x y) (length x))
+
 (define (multiinsertLR new oldL oldR lat)
   (cond
     [(null? lat) '()]
@@ -496,3 +500,67 @@
     [else
      (cons (car lat) (multiinsertLR new oldL oldR (cdr lat)))]))
     
+(define (multiinsertLR&co new oldL oldR lat col)
+  (cond
+    [(null? lat)
+     (col '() 0 0)]
+    [(equal? (car lat) oldL)
+     (multiinsertLR&co new oldL oldR (cdr lat)
+                       (lambda (newlat L R)
+                         (col (cons new (cons oldL newlat)) (add1 L) R)))]
+    [(equal? (car lat) oldR)
+     (multiinsertLR&co new oldL oldR (cdr lat)
+                       (lambda (newlat L R)
+                         (col (cons oldR (cons new newlat)) L (add1 R))))]
+    [else (multiinsertLR&co new oldL oldR (cdr lat)
+                            (lambda (newlat L R)
+                              (col (cons (car lat) newlat) L R)))]))
+
+(define (even? n) (= (* (/ n 2) 2) n))
+
+(define (evens-only* l)
+  (cond
+    [(null? l) '()]
+    [(atom? (car l)) (cond
+                       [(even? (car l))
+                        (cons (car l) (evens-only* (cdr l)))]
+                       [else
+                        (evens-only* (cdr l))])]
+    [else (cons (evens-only* (car l)) (evens-only* (cdr l)))]))
+
+(define (map* f l)
+  (cond
+    [(null? l) '()]
+    [(atom? (car l)) (if (f (car l))
+                         (cons (car l) (map* f (cdr l)))
+                         (map* f (cdr l)))]
+    [else (cons (map* f (car l)) (map* f (cdr l)))]))
+
+(define (evens-only*_ l)
+  (map* even? l))
+                     
+(define (evens-only*&co l col)
+  (cond
+    [(null? l) (col '() 1 0)]
+    [(atom? (car l)) (cond
+                       [(even? (car l)) (evens-only*&co (cdr l)
+                                                        (lambda (newl p s)
+                                                          (col (cons (car l) newl)
+                                                               (* (car l) p)
+                                                               s)))]
+                       [else (evens-only*&co (cdr l)
+                                             (lambda (newl p s)
+                                               (col (cons (car l) newl)
+                                                    p
+                                                    (+ (car l) s))))])]
+    [else (evens-only*&co (car l)
+                          (lambda (al ap as)
+                            (evens-only*&co (cdr l)
+                                            (lambda (dl dp ds)
+                                              (col (cons al dl)
+                                                   (* ap dp)
+                                                   (+ as ds))))))]))
+
+(define (the-last-friend newl product sum)
+  (cons sum (cons product newl)))
+                       

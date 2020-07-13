@@ -84,4 +84,8 @@
                                                 (+c n x3 k)))))))))
 
 (define (length-c l k)
-  (if (null) 
+  (if (null? l)
+      (k 0)
+      (length-c (cdr l) (lambda (cdr-len)
+                          (k (add1 cdr-len))))))
+
