@@ -564,3 +564,15 @@
 (define (the-last-friend newl product sum)
   (cons sum (cons product newl)))
                        
+(define (looking a lat)
+  (keep-looking a (pick 1 lat) lat))
+
+(define (keep-looking a sorn lat)
+  (cond
+    [(number? sorn) (keep-looking  a (pick sorn lat) lat)]
+    [else (eq? sorn a)]))
+
+
+(define (shift pair)
+  (build (first (first pair))
+         (build (second (first pair)) (second pair))))
