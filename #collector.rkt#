@@ -95,6 +95,6 @@
     [else (* n (factorial (sub1 n)))]))
 
 (define (factorial-acm n answer)
-  (if (zero? n)
-      answer
-      (factorial-acm (sub1 n) (* n answer))))
+  (cond
+    [(zero? n) answer]
+    [factorial-acm (sub1 n) (* n answer)]
