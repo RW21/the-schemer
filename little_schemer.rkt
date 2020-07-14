@@ -563,7 +563,7 @@
 
 (define (the-last-friend newl product sum)
   (cons sum (cons product newl)))
-                       
+
 (define (looking a lat)
   (keep-looking a (pick 1 lat) lat))
 
